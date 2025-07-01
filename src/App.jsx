@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import FormularioRegistro from './components/FormularioRegistro';
+import GraficosHabitos from './components/GraficoHabitos';
 
 const App = () => {
   const [entradas, setEntradas] = useState(() => {
@@ -19,14 +20,14 @@ const App = () => {
     <div className="min-h-screen bg-gradient-to.br from-green-200 via-green-300 to-green-400 p-6">
       <h1 className="text-4xl font-bold text-center mb-8 text-green-900 drop-shadow-lg">Control de Alimentación y Emociones</h1>
       <FormularioRegistro onAgregarEntrada={agregarEntrada} />
-      <section className="max-w-md mx-auto mt-10 bg-white bg-opacity-80 rounded-lg p-6 shadow-lg">
-        <h2 className="text-xl font-semibold mb-4">Entradas registradas</h2>
+      <section className="max-w-md mx-auto mt-10 bg-white bg-opacity-80 rounded-xl p-6 shadow-2xl">
+        <h2 className="text-xl font-semibold mb-4">Entradas Registradas</h2>
         {entradas.length === 0 ? (
           <p className="text-center text-green-700">No hay entradas registradas aún.</p>
         ) : (
           <ul className="space-y-4">
             {entradas.map(({ id, comida, nivelSaciedad, estadoEmocional, fecha }) => (
-              <li key={id} className="bg-green-100 p-4 rounded shadow">
+              <li key={id} className="bg-green-200 p-4 rounded shadow-xl">
                 <p><strong>Comida:</strong> {comida}</p>
                 <p><strong>Nivel de saciedad:</strong> {nivelSaciedad}</p>
                 <p><strong>Estado emocional:</strong> {estadoEmocional}</p>
@@ -36,6 +37,7 @@ const App = () => {
           </ul>
         )}
       </section>
+      <GraficosHabitos />
     </div>
   );
 };
