@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import FormularioRegistro from './components/FormularioRegistro';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [entradas, setEntradas] = useState(() => {
+    const datosGuardados = localStorage.getItem('entradas');
+    return datosGuardados ? JSON.parse(datosGuardados) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('entradas', JSON.stringify(entradas));
+  }, [entradas]);
+
+  const agregarEntrada = (entrada) => {
+    setEntradas((prevEntradas) => [entrada, ...prevEntradas]);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="min-h-screen p-6">
+      <h1 className="text-4xl font-bold text-center mb-8 text-emerald-600 drop-shadow-lg">Control de Alimentación y Emociones</h1>
+      <FormularioRegistro onAgregarEntrada={agregarEntrada} />
+      <section className="max-w-md mx-auto mt-10 bg-white bg-opacity-80 rounded-lg p-6 shadow-lg">
+        <h2 className="text-xl font-semibold mb-4">Entradas registradas</h2>
+        {entradas.length === 0 ? (
+          <p className="text-center text-emerald-700">No hay entradas registradas aún.</p>
+        ) : (
+          <ul className="space-y-4">
+            {entradas.map(({ id, comida, nivelSaciedad, estadoEmocional, fecha }) => (
+              <li key={id} className="bg-emerald-100 p-4 rounded shadow">
+                <p><strong>Comida:</strong> {comida}</p>
+                <p><strong>Nivel de saciedad:</strong> {nivelSaciedad}</p>
+                <p><strong>Estado emocional:</strong> {estadoEmocional}</p>
+                <p className="text-sm text-emerald-700">{new Date(fecha).toLocaleString()}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
+  );
+};
 
-export default App
+export default App;
