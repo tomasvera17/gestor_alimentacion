@@ -24,7 +24,7 @@ const FormularioRegistro = ({ onAgregarEntrada }) => {
   };
 
   return (
-    <form onSubmit={manejarEnvio} className="p-6 bg-gradient-to-r from-emerald-100 via-emerald-200 to-emerald-300 rounded-lg shadow-2xl max-w-md mx-auto text-gray-900">
+    <form onSubmit={manejarEnvio} className="p-6 bg-gradient-to-r from-emerald-50 via-emerald-100 to-emerald-200 rounded-lg shadow-2xl max-w-md mx-auto text-gray-900">
       <h2 className="text-2xl font-semibold mb-6 text-center drop-shadow-md">Registrar Comida y Emociones</h2>
 
       <label className="block mb-3 font-semibold" htmlFor="comida">Comida consumida</label>
@@ -69,7 +69,7 @@ const FormularioRegistro = ({ onAgregarEntrada }) => {
 
       <button
         type="submit"
-        className="w-full bg-stone-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-md shadow-md transition duration-300"
+        className="w-full bg-stone-800 hover:bg-emerald-400 text-white py-3 rounded-md shadow-lg transition duration-300"
       >
         Agregar entrada
       </button>
