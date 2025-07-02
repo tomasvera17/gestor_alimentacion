@@ -87,9 +87,9 @@ const GraficosHabitos = () => {
       {
         label: 'Nivel de Saciedad Promedio',
         data: promediosSaciedad,
-        backgroundColor: '#60a5fa',
-        borderColor: '#3b82f6',
-        borderWidth: 1,
+        backgroundColor: '#50C878',
+        borderColor: 'black',
+        borderWidth: 1.5,
       },
     ],
   };
@@ -100,14 +100,9 @@ const GraficosHabitos = () => {
       {
         label: 'Estado Emocional Promedio',
         data: promediosEmociones,
-        backgroundColor: promediosEmociones.map(valor => {
-          if (valor >= 3.5) return '#4ade80'; // feliz
-          if (valor >= 2.5) return '#facc15'; // neutral
-          if (valor >= 1.5) return '#f97316'; // estresado
-          return '#ef4444'; // triste
-        }),
-        borderColor: '#374151',
-        borderWidth: 1,
+        backgroundColor: '#50C878',
+        borderColor: 'black',
+        borderWidth: 1.5,
       },
     ],
   };
@@ -126,6 +121,16 @@ const GraficosHabitos = () => {
           }
         }
       }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const value = context.parsed.y;
+            return `Nivel: ${['', 'Bajo', 'Medio', 'Alto'][Math.round(value)]}`;
+          }
+        }
+      },
     }
   };
   // Opciones para el gráfico de emociones
@@ -140,6 +145,16 @@ const GraficosHabitos = () => {
           stepSize: 1,
           callback: function(value) {
             return ['', 'Triste', 'Estresado', 'Neutral', 'Feliz'][value] || '';
+          }
+        }
+      }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            const value = context.parsed.y;
+            return `Estado: ${['', 'Triste', 'Estresado', 'Neutral', 'Feliz'][Math.round(value)]}`;
           }
         }
       }

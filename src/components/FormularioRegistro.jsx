@@ -24,7 +24,7 @@ const FormularioRegistro = ({ onAgregarEntrada }) => {
   };
 
   return (
-    <form onSubmit={manejarEnvio} className="p-6 bg-gradient-to-r from-green-300 via-green-400 to-green-500 rounded-lg shadow-lg max-w-md mx-auto text-gray-900">
+    <form onSubmit={manejarEnvio} className="p-6 bg-gradient-to-r from-emerald-100 via-emerald-200 to-emerald-300 rounded-lg shadow-2xl max-w-md mx-auto text-gray-900">
       <h2 className="text-2xl font-semibold mb-6 text-center drop-shadow-md">Registrar Comida y Emociones</h2>
 
       <label className="block mb-3 font-semibold" htmlFor="comida">Comida consumida</label>
@@ -33,7 +33,7 @@ const FormularioRegistro = ({ onAgregarEntrada }) => {
         type="text"
         value={comida}
         onChange={(e) => setComida(e.target.value)}
-        className="w-full p-3 rounded-md mb-5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-600"
+        className="w-full p-3 rounded-md mb-5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
         placeholder="Ejemplo: Pasta, arroz, ensalada, etc."
         required
       />
@@ -43,7 +43,7 @@ const FormularioRegistro = ({ onAgregarEntrada }) => {
         id="nivelSaciedad"
         value={nivelSaciedad}
         onChange={(e) => setNivelSaciedad(e.target.value)}
-        className="w-full p-3 rounded-md mb-5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-600"
+        className="w-full p-3 rounded-md mb-5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
         required
       >
         <option value="">Selecciona un nivel</option>
@@ -57,7 +57,7 @@ const FormularioRegistro = ({ onAgregarEntrada }) => {
         id="estadoEmocional"
         value={estadoEmocional}
         onChange={(e) => setEstadoEmocional(e.target.value)}
-        className="w-full p-3 rounded-md mb-5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-green-600"
+        className="w-full p-3 rounded-md mb-5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
         required
       >
         <option value="">Selecciona un estado</option>
@@ -69,7 +69,7 @@ const FormularioRegistro = ({ onAgregarEntrada }) => {
 
       <button
         type="submit"
-        className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-md shadow-md transition duration-300"
+        className="w-full bg-stone-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-md shadow-md transition duration-300"
       >
         Agregar entrada
       </button>

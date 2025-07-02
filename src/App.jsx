@@ -17,21 +17,21 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to.br from-green-200 via-green-300 to-green-400 p-6">
-      <h1 className="text-4xl font-bold text-center mb-8 text-green-900 drop-shadow-lg">Control de Alimentación y Emociones</h1>
+    <div className="min-h-screen p-6">
+      <h1 className="text-4xl font-bold text-center mb-8 text-emerald-700 drop-shadow-lg">Control de Alimentación y Emociones</h1>
       <FormularioRegistro onAgregarEntrada={agregarEntrada} />
       <section className="max-w-md mx-auto mt-10 bg-white bg-opacity-80 rounded-xl p-6 shadow-2xl">
         <h2 className="text-xl font-semibold mb-4">Entradas Registradas</h2>
         {entradas.length === 0 ? (
-          <p className="text-center text-green-700">No hay entradas registradas aún.</p>
+          <p className="text-center text-emerald-700">No hay entradas registradas aún.</p>
         ) : (
           <ul className="space-y-4">
             {entradas.map(({ id, comida, nivelSaciedad, estadoEmocional, fecha }) => (
-              <li key={id} className="bg-green-200 p-4 rounded shadow-xl">
+              <li key={id} className="bg-emerald-200 p-4 rounded shadow-xl">
                 <p><strong>Comida:</strong> {comida}</p>
                 <p><strong>Nivel de saciedad:</strong> {nivelSaciedad}</p>
                 <p><strong>Estado emocional:</strong> {estadoEmocional}</p>
-                <p className="text-sm text-green-600">{new Date(fecha).toLocaleString()}</p>
+                <p className="text-sm text-emerald-600">{new Date(fecha).toLocaleString()}</p>
               </li>
             ))}
           </ul>
