@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import FormularioRegistro from './components/FormularioRegistro';
 import GraficosHabitos from './components/GraficoHabitos';
 import Navegacion from './components/Navegacion';
+import RecetasSaludables from './components/RecetasSaludables';
+import { MetaSemanal } from './components/MetaSemanal';
+
 
 const App = () => {
   const [entradas, setEntradas] = useState(() => {
@@ -43,8 +46,12 @@ const App = () => {
           </section>
         </>
       );
-    } else {
+    } else if (vistaActual === 'graficos'){
       return <GraficosHabitos />;
+    } else if (vistaActual === 'recetas'){
+      return <RecetasSaludables />;
+    } else if (vistaActual === 'meta') {
+      return <MetaSemanal />;
     }
   };
 

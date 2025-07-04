@@ -29,6 +29,30 @@ const Navegacion = ({ vistaActual, cambiarVista }) => {
             Gráficos de Hábitos Semanales
           </button>
         </li>
+        <li>
+          <button
+            onClick={() => cambiarVista('recetas')}
+            className={`px-4 py-2 rounded-md transition-colors duration-200 cursor-pointer ${
+              vistaActual === 'recetas'
+                ? 'bg-emerald-600 text-white font-bold'
+                : 'text-emerald-600 hover:bg-emerald-100'
+            }`}
+          >
+            Recetas Recomendadas
+          </button>
+        </li>
+        <li>
+          <button
+            onClick={() => cambiarVista('meta')}
+            className={`px-4 py-2 rounded-md transition-colors duration-200 cursor-pointer ${
+              vistaActual === 'meta'
+                ? 'bg-emerald-600 text-white font-bold'
+                : 'text-emerald-600 hover:bg-emerald-100'
+            }`}
+          >
+            Meta Semanal
+          </button>
+        </li>
       </ul>
     </nav>
   );
