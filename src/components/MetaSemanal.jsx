@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react';
 export const MetaSemanal = () => {
   const [goals, setGoals] = useState({
     azucar: 50,
-    agua: 1.5,
+    agua: 2,
     ejercicio: 3,
     vegetales: 3
   });
 
   const [progress, setProgress] = useState({
     azucar: 35,
-    agua: 1.2,
+    agua: 1,
     ejercicio: 2,
     vegetales: 2
   });
@@ -28,19 +28,19 @@ export const MetaSemanal = () => {
       unit: '%',
       min: 0,
       max: 100,
-      step: 5,
+      step: 1,
       inverse: true // Menor es mejor
     },
-    { 
+    {
       key: 'agua',
-      title: 'Agua diaria', 
+      title: 'Agua diaria',
       icon: '💧',
       desc: 'Recomendación OMS',
       color: 'blue',
       unit: 'L',
       min: 1,
       max: 5,
-      step: 0.5,
+      step: 1,
       inverse: false
     },
     { 
@@ -73,13 +73,19 @@ export const MetaSemanal = () => {
   const calculateProgress = (metric) => {
     const goal = goals[metric.key];
     const current = progress[metric.key];
-    
+
     if (metric.inverse) {
-      // Para métricas inversas (como azúcar), menor es mejor
-      return goal === 0 ? 100 : Math.max(0, Math.min(100, ((goal - current) / goal) * 100));
+      if (current <= goal) return 100;
+      if (current >= metric.max) return 0;
+      const range = metric.max - goal;
+      if (range === 0) return 0;
+      const progressValue = ((metric.max - current) / range) * 100;
+      return Math.max(0, Math.min(100, progressValue));
     } else {
-      // Para métricas normales, mayor es mejor
-      return goal === 0 ? 0 : Math.min(100, (current / goal) * 100);
+      if (current >= goal) return 100;
+      if (goal === 0) return 0;
+      const progressValue = (current / goal) * 100;
+      return Math.max(0, Math.min(100, progressValue));
     }
   };
 
@@ -128,29 +134,27 @@ export const MetaSemanal = () => {
 
   // Actualizar objetivo
   const updateGoal = (key, value) => {
-    setGoals(prev => ({ ...prev, [key]: value }));
+    setGoals(prev => ({ ...prev, [key]: Math.round(value) }));
   };
 
-  // Simular progreso (en una app real vendría de una API)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress(prev => ({
-        azucar: Math.max(0, prev.azucar + (Math.random() - 0.7) * 2),
-        agua: Math.max(0, Math.min(5, prev.agua + (Math.random() - 0.5) * 0.1)),
-        ejercicio: Math.max(0, Math.min(7, prev.ejercicio + (Math.random() - 0.6) * 0.2)),
-        vegetales: Math.max(0, Math.min(8, prev.vegetales + (Math.random() - 0.5) * 0.1))
-      }));
-    }, 3000);
+  // Actualizar progreso
+  const updateProgress = (key, value) => {
+    setProgress(prev => ({ ...prev, [key]: Math.round(value) }));
+  };
 
-    return () => clearInterval(interval);
-  }, []);
+
 
   // Calcular progreso general
-  const overallProgress = metricsConfig.reduce((acc, metric) => 
-    acc + calculateProgress(metric), 0) / metricsConfig.length;
+  const [overallProgress, setOverallProgress] = useState(0);
+
+  useEffect(() => {
+    const newOverallProgress = metricsConfig.reduce((acc, metric) => 
+      acc + calculateProgress(metric), 0) / metricsConfig.length;
+    setOverallProgress(newOverallProgress);
+  }, [goals, progress]);
 
   return (
-    <div className="bg-gradient-to-br from-white via-gray-50 to-blue-50 p-8 rounded-3xl shadow-2xl border border-gray-200 transform transition-all duration-500 hover:shadow-3xl">
+    <div className="max-w-full mx-auto mt-10 p-4 bg-white rounded-xl shadow-xl">
       {/* Header con progreso general */}
       <div className="mb-8 text-center">
         <div className="relative inline-block mb-4">
@@ -193,8 +197,8 @@ export const MetaSemanal = () => {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         {/* Panel de métricas */}
-        <div className="xl:col-span-2 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="xl:col-span-2 space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {metricsConfig.map((metric) => {
               const colors = getMetricColors(metric.color);
               const progressPercent = calculateProgress(metric);
@@ -203,7 +207,7 @@ export const MetaSemanal = () => {
               return (
                 <div 
                   key={metric.key}
-                  className={`${colors.bg} border-2 p-6 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg group cursor-pointer`}
+                  className={`${colors.bg} border-2 p-6 rounded-2xl transition-all duration-300 hover:scale-[1.02] hover:shadow-lg group cursor-pointer min-h-[200px] flex flex-col justify-between`}
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
@@ -231,7 +235,7 @@ export const MetaSemanal = () => {
                     <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                       <div 
                         className={`h-full ${colors.gradient} transition-all duration-1000 ease-out rounded-full`}
-                        style={{ width: `${Math.min(100, progressPercent)}%` }}
+                        style={{ width: `${Math.round(Math.max(0, Math.min(100, progressPercent)))}%` }}
                       ></div>
                     </div>
                   </div>
@@ -245,7 +249,7 @@ export const MetaSemanal = () => {
           </div>
 
           {/* Resumen estadístico */}
-          <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+          <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-2xl shadow-md">
             <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
               <span>📊</span>
               Análisis Semanal
@@ -269,14 +273,14 @@ export const MetaSemanal = () => {
         </div>
 
         {/* Panel de controles */}
-        <div className="space-y-6">
-          <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
-            <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+        <div className="space-y-8">
+          <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+            <h3 className="text-xl font-bold text-gray-800 mb-8 flex items-center gap-2">
               <span>🎯</span>
               Ajustar Objetivos
             </h3>
             
-            <div className="space-y-6">
+            <div className="space-y-8">
               {metricsConfig.map((metric) => {
                 const colors = getMetricColors(metric.color);
                 
@@ -285,7 +289,7 @@ export const MetaSemanal = () => {
                     <div className="flex justify-between items-center">
                       <label className="font-medium text-gray-700 text-sm flex items-center gap-2">
                         <span>{metric.icon}</span>
-                        {metric.title}
+                        {metric.title} (Meta)
                       </label>
                       <span className={`text-lg font-bold ${colors.accent} bg-gray-100 px-3 py-1 rounded-lg`}>
                         {goals[metric.key]}{metric.unit}
@@ -310,6 +314,23 @@ export const MetaSemanal = () => {
                         <span>{metric.max}{metric.unit}</span>
                       </div>
                     </div>
+
+                    {/* New Progress Input */}
+                    <div className="flex justify-between items-center mt-4 pt-3 border-t border-gray-100">
+                      <label className="font-medium text-gray-700 text-sm flex items-center gap-2">
+                        <span>{metric.icon}</span>
+                        {metric.title} (Actual)
+                      </label>
+                      <input
+                        type="number"
+                        min={metric.min}
+                        max={metric.max}
+                        step={metric.step}
+                        value={progress[metric.key]}
+                        onChange={(e) => updateProgress(metric.key, parseFloat(e.target.value))}
+                        className="w-auto min-w-[6rem] p-2 border border-gray-300 rounded-lg text-center text-lg font-bold focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      />
+                    </div>
                   </div>
                 );
               })}
@@ -317,12 +338,12 @@ export const MetaSemanal = () => {
           </div>
 
           {/* Panel de consejos */}
-          <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl border border-blue-200">
-            <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-2xl border border-blue-200">
+            <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
               <span>💡</span>
               Consejo del Día
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="bg-white p-4 rounded-xl shadow-sm">
                 <p className="text-sm text-gray-600 leading-relaxed">
                   <strong className="text-blue-600">Hidratación:</strong> Bebe un vaso de agua 30 minutos antes de cada comida para mejorar la digestión y controlar el apetito.
