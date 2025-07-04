@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import FormularioRegistro from './components/FormularioRegistro';
 import GraficosHabitos from './components/GraficoHabitos';
+import RecetasSaludables from './components/RecetasSaludables';
 import { MetaSemanal } from './components/MetaSemanal';
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
         )}
       </section>
       <GraficosHabitos />
+      <RecetasSaludables />
       <MetaSemanal />
     </div>
   );
