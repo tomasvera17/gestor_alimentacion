@@ -1,23 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-const FormularioRegistro = ({ onAgregarEntrada }) => {
+const FormularioRegistro = ({ onAgregarEntrada, entradaEditada, onActualizarEntrada, onCancelarEdicion}) => {
   const [comida, setComida] = useState('');
   const [nivelSaciedad, setNivelSaciedad] = useState('');
   const [estadoEmocional, setEstadoEmocional] = useState('');
+
+  useEffect(() => {
+    if (entradaEditada) {
+      setComida(entradaEditada.comida);
+      setNivelSaciedad(entradaEditada.nivelSaciedad);
+      setEstadoEmocional(entradaEditada.estadoEmocional);
+    } else {
+      setComida('');
+      setNivelSaciedad('');
+      setEstadoEmocional('');
+    }
+  }, [entradaEditada]);
 
   const manejarEnvio = (e) => {
     e.preventDefault();
     if (!comida || !nivelSaciedad || !estadoEmocional) return;
 
-    const nuevaEntrada = {
-      id: Date.now(),
-      comida,
-      nivelSaciedad,
-      estadoEmocional,
-      fecha: new Date().toISOString(),
-    };
-
-    onAgregarEntrada(nuevaEntrada);
+    if (entradaEditada) {
+      const entradaActualizada = {
+        ...entradaEditada,
+        comida,
+        nivelSaciedad,
+        estadoEmocional,
+      };
+      onActualizarEntrada(entradaActualizada);
+    } else {
+      const nuevaEntrada = {
+        id: Date.now(),
+        comida,
+        nivelSaciedad,
+        estadoEmocional,
+        fecha: new Date().toISOString(),
+      };
+      onAgregarEntrada(nuevaEntrada);
+    }
     setComida('');
     setNivelSaciedad('');
     setEstadoEmocional('');
@@ -25,7 +46,7 @@ const FormularioRegistro = ({ onAgregarEntrada }) => {
 
   return (
     <form onSubmit={manejarEnvio} className="p-6 bg-gradient-to-r from-emerald-50 via-emerald-100 to-emerald-200 rounded-lg shadow-2xl max-w-md mx-auto text-gray-900">
-      <h2 className="text-2xl font-semibold mb-6 text-center drop-shadow-md">Registrar Comida y Emociones</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-center drop-shadow-md">{entradaEditada ? 'Editar Entrada' : 'Registrar Comida y Emociones'}</h2>
 
       <label className="block mb-3 font-semibold" htmlFor="comida">Comida consumida</label>
       <input
@@ -67,12 +88,23 @@ const FormularioRegistro = ({ onAgregarEntrada }) => {
         <option value="estresado">Estresado/a</option>
       </select>
 
-      <button
-        type="submit"
-        className="w-full bg-stone-800 hover:bg-emerald-400 text-white py-3 rounded-md shadow-lg transition duration-300"
-      >
-        Agregar entrada
-      </button>
+      <div className="flex space-x-4">
+        <button
+          type="submit"
+          className="w-full bg-stone-800 hover:bg-emerald-400 text-white py-3 rounded-md shadow-lg transition duration-300"
+        >
+          {entradaEditada ? 'Actualizar entrada' : 'Agregar entrada'}
+        </button>
+        {entradaEditada && (
+          <button 
+            type="button"
+            onClick={onCancelarEdicion}
+            className="flex-1 bg-gray-400 hover:bg-gray-500 text-white py-3 rounded-md shadow-lg transition duration-300"
+            >
+              Cancelar
+            </button>
+        )}
+      </div>
     </form>
   );
 };

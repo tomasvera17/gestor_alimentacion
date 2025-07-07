@@ -15,7 +15,6 @@ export const MetaSemanal = () => {
     vegetales: 2
   });
 
-  const [achievements, setAchievements] = useState([]);
 
   // Configuración de métricas
   const metricsConfig = [
@@ -29,7 +28,7 @@ export const MetaSemanal = () => {
       min: 0,
       max: 100,
       step: 1,
-      inverse: true // Menor es mejor
+      inverse: false 
     },
     {
       key: 'agua',
